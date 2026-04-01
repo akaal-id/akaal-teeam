@@ -1,0 +1,221 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background);
+    color: var(--foreground);
+}
+
+.header {
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+    height: 4rem;
+}
+
+.backButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--foreground);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background-color 0.2s, color 0.2s;
+    margin-left: -0.5rem;
+}
+
+.backButton:hover {
+    background-color: var(--border);
+    color: var(--teal);
+}
+
+.backIcon {
+    width: 1.4rem;
+    height: 1.4em;
+    stroke-width: 1.4px;
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: radial-gradient(circle at center, rgba(20, 184, 166, 0.05) 0%, var(--background) 70%);
+}
+
+.loginCard {
+    width: 100%;
+    max-width: 440px;
+    background-color: var(--dark-grey);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.title {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.subtitle {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    color: #94a3b8;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.label {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--foreground);
+}
+
+.inputField {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    padding: 0.875rem 1rem;
+    border-radius: 0.5rem;
+    color: var(--foreground);
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+.inputField::placeholder {
+    color: #475569;
+}
+
+.inputField:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.2);
+}
+
+.passwordWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.passwordWrapper .inputField {
+    width: 100%;
+}
+
+.eyeBtn {
+    position: absolute;
+    right: 0.875rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+    padding: 0;
+    line-height: 0;
+}
+
+.eyeBtn:hover {
+    color: var(--teal);
+}
+
+.forgotPasswordWrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.textLink {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    color: var(--teal);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.textLink:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+.btnPrimary {
+    background-color: var(--purple);
+    color: white;
+    padding: 0.875rem;
+    border-radius: 0.5rem;
+    font-family: var(--font-display);
+    letter-spacing: 0.05rem;
+    font-weight: 500;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: transform 0.2s, background-color 0.2s;
+    border: none;
+    display: block;
+    margin-top: 0.5rem;
+    box-shadow: 0 4px 14px rgba(168, 85, 247, 0.4);
+}
+
+.btnPrimary:hover {
+    background-color: #9333ea;
+}
+
+.errorMessage {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-family: var(--font-display);
+    margin-bottom: 1.5rem;
+    text-align: center;
+    border-left: 4px solid #ef4444;
+}
+
+.footerLinks {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.875rem;
+    font-family: var(--font-display);
+}
+
+.footerText {
+    color: #94a3b8;
+}
+
+.textLinkStrong {
+    color: var(--teal);
+    font-weight: 700;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.textLinkStrong:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}

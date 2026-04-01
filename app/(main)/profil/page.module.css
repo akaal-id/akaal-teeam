@@ -1,0 +1,410 @@
+.container {
+    padding: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Header */
+.pageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.headerTitle {
+    font-family: var(--font-display), sans-serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--foreground);
+    margin: 0 0 0.25rem 0;
+}
+
+.subtitle {
+    font-size: 0.875rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Action Buttons */
+.editBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(20, 184, 166, 0.1);
+    border: 1px solid rgba(20, 184, 166, 0.3);
+    color: var(--teal);
+    padding: 0.6rem 1.25rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-display), sans-serif;
+}
+
+.editBtn:hover {
+    background: rgba(20, 184, 166, 0.2);
+    transform: translateY(-1px);
+}
+
+.saveBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--teal);
+    border: none;
+    color: #0f172a;
+    padding: 0.6rem 1.5rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-display), sans-serif;
+}
+
+.saveBtn:hover:not(:disabled) {
+    background: #0d9488;
+    transform: translateY(-1px);
+}
+
+.saveBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.cancelBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(100, 116, 139, 0.1);
+    border: 1px solid rgba(100, 116, 139, 0.2);
+    color: #94a3b8;
+    padding: 0.6rem 1.25rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-display), sans-serif;
+}
+
+.cancelBtn:hover {
+    background: rgba(100, 116, 139, 0.2);
+}
+
+/* Success Banner */
+.successBanner {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(20, 184, 166, 0.08);
+    border: 1px solid rgba(20, 184, 166, 0.25);
+    color: var(--teal);
+    padding: 0.875rem 1.25rem;
+    border-radius: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Layout Grid */
+.profileGrid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+/* Avatar Card */
+.avatarCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: 1.5rem;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 1rem;
+}
+
+.avatarWrapper {
+    position: relative;
+    margin-bottom: 0.75rem;
+}
+
+.avatarInitials {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal), var(--purple));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    font-family: var(--font-display), sans-serif;
+    box-shadow: 0 0 30px rgba(20, 184, 166, 0.3);
+}
+
+.avatarImg {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 30px rgba(20, 184, 166, 0.3);
+}
+
+.statusDot {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 14px;
+    height: 14px;
+    background: #22c55e;
+    border-radius: 50%;
+    border: 2px solid var(--background);
+}
+
+.profileName {
+    font-family: var(--font-display), sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--foreground);
+    margin: 0;
+}
+
+.profileRole {
+    font-size: 0.85rem;
+    color: var(--teal);
+    font-weight: 600;
+    margin: 0;
+}
+
+.statusBadge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.3rem 0.85rem;
+    border-radius: 9999px;
+    margin-top: 0.25rem;
+}
+
+.statusActive {
+    background: rgba(20, 184, 166, 0.1);
+    color: var(--teal);
+    border: 1px solid rgba(20, 184, 166, 0.25);
+}
+
+.statusInactive {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.profileStats {
+    width: 100%;
+    margin-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    padding-top: 1.25rem;
+}
+
+.statItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: left;
+}
+
+.statLabel {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.statValue {
+    font-size: 0.875rem;
+    color: var(--foreground);
+    font-weight: 600;
+}
+
+/* Detail Card */
+.detailCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+}
+
+.sectionTitle {
+    font-family: var(--font-display), sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--foreground);
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.fieldGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.fieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.fieldLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.fieldValue {
+    font-size: 0.95rem;
+    color: var(--foreground);
+    font-weight: 500;
+    margin: 0;
+    padding: 0.5rem 0;
+}
+
+.fieldInput {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 0.6rem 0.875rem;
+    font-size: 0.9rem;
+    color: var(--foreground);
+    font-family: var(--font-display), sans-serif;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.fieldInput:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.15);
+}
+
+.fieldTextarea {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 0.75rem 0.875rem;
+    font-size: 0.9rem;
+    color: var(--foreground);
+    font-family: var(--font-display), sans-serif;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 1.6;
+}
+
+.fieldTextarea:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.15);
+}
+
+.readOnlyNote {
+    font-size: 0.72rem;
+    color: #475569;
+    font-style: italic;
+}
+
+/* Account Info Card */
+.accountCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+}
+
+.accountGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.accountItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.accountLabel {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.accountValue {
+    font-size: 0.9rem;
+    color: var(--foreground);
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .profileGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .avatarCard {
+        position: static;
+    }
+
+    .fieldGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .accountGrid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .accountGrid {
+        grid-template-columns: 1fr;
+    }
+}

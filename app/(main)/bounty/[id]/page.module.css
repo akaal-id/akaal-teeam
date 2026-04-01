@@ -1,0 +1,275 @@
+.container {
+    min-height: 100vh;
+    background-color: #f8fafc;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-bottom: 7rem;
+}
+
+.header {
+    background-color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.backButton {
+    padding: 0.5rem;
+    margin-left: -0.5rem;
+    border-radius: 9999px;
+    color: #334155;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.backButton:hover {
+    background-color: #f1f5f9;
+}
+
+.headerTitle {
+    font-weight: 500;
+    color: #1e293b;
+    font-size: 1.125rem;
+}
+
+.main {
+    padding: 1rem;
+    max-width: 28rem;
+    margin: 0 auto;
+}
+
+.titleSection {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 0.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.titleSection:hover .titleBgTopRight,
+.titleSection:hover .titleBgBottomLeft {
+    transform: scale(1.1);
+}
+
+.titleBgTopRight {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 6rem;
+    height: 6rem;
+    background-color: #eff6ff;
+    border-bottom-left-radius: 9999px;
+    z-index: 0;
+    opacity: 0.5;
+    transition: transform 0.5s;
+}
+
+.titleBgBottomLeft {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 4rem;
+    height: 4rem;
+    background-color: #eff6ff;
+    border-top-right-radius: 9999px;
+    z-index: 0;
+    opacity: 0.5;
+    transition: transform 0.5s;
+    transition-delay: 100ms;
+}
+
+.iconWrapper {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 9999px;
+    background-color: #dbeafe;
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 10;
+    transition: transform 0.3s;
+}
+
+.iconWrapper:hover {
+    transform: scale(1.05);
+}
+
+.titleText {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #0f172a;
+    line-height: 1.25;
+    position: relative;
+    z-index: 10;
+}
+
+.contentSection {
+    margin-bottom: 1.5rem;
+    background-color: #ffffff;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid #f1f5f9;
+    transition: box-shadow 0.2s;
+}
+
+.contentSection:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.sectionTitle {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #1e293b;
+    margin-bottom: 1rem;
+    white-space: nowrap;
+}
+
+.list {
+    padding-left: 1.25rem;
+    color: #475569;
+    font-size: 0.875rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.listDisc {
+    list-style-type: disc;
+}
+
+.listDecimal {
+    list-style-type: decimal;
+}
+
+.ctaButton {
+    width: 100%;
+    background-color: var(--primary-blue);
+    color: #ffffff;
+    font-weight: 500;
+    border-radius: 0.75rem;
+    padding: 0.875rem;
+    margin-top: 1rem;
+    transition: all 0.2s;
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+}
+
+.ctaButton:hover {
+    background-color: var(--primary-blue-hover);
+}
+
+.ctaButton:active {
+    transform: scale(0.98);
+}
+
+.bottomCard {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 28rem;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 50;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.bottomCard:hover {
+    background-color: #f8fafc;
+    box-shadow: 0 -8px 10px -1px rgba(0, 0, 0, 0.1);
+}
+
+.bottomCardLeft {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.bottomCardIcon {
+    width: 3rem;
+    height: 3rem;
+    background-color: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+    transition: background-color 0.2s;
+}
+
+.bottomCard:hover .bottomCardIcon {
+    background-color: #ffffff;
+}
+
+.bottomCardTitle {
+    font-weight: 500;
+    color: #0f172a;
+    transition: color 0.2s;
+}
+
+.bottomCard:hover .bottomCardTitle {
+    color: #1d4ed8;
+}
+
+.bottomCardStatus {
+    font-size: 0.75rem;
+    color: var(--primary-blue);
+    font-weight: 500;
+    margin-top: 0.125rem;
+}
+
+.bottomCardChevron {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 9999px;
+    background-color: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.bottomCardChevronIcon {
+    color: #94a3b8;
+    transition: color 0.2s;
+}
+
+.bottomCard:hover .bottomCardChevron {
+    background-color: #eff6ff;
+}
+
+.bottomCard:hover .bottomCardChevronIcon {
+    color: var(--primary-blue);
+}

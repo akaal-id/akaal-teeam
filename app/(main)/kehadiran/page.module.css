@@ -1,0 +1,310 @@
+.container {
+    padding: 1.5rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.headerTitle {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--foreground);
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #94a3b8;
+    margin-top: 0.25rem;
+}
+
+.clockInBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--teal);
+    color: var(--background);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(20, 184, 166, 0.4);
+    font-family: inherit;
+}
+
+.clockInBtn:hover {
+    background-color: #0f9d8a;
+    transform: translateY(-2px);
+}
+
+.btnSecondary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--dark-grey);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s, transform 0.2s;
+    font-family: inherit;
+}
+
+.btnSecondary:hover {
+    border-color: var(--teal);
+    background-color: rgba(20, 184, 166, 0.05);
+    transform: translateY(-2px);
+}
+
+.clockOutBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+    font-family: inherit;
+}
+
+.clockOutBtn:hover {
+    background-color: #dc2626;
+    transform: translateY(-2px);
+}
+
+.iconSm {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+/* Main Content */
+.mainContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Metrics Grid */
+.metricsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+}
+
+.metricCard {
+    background-color: var(--dark-grey);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.metricHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.metricTitle {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.iconWrapperTeal {
+    background-color: rgba(20, 184, 166, 0.1);
+    color: var(--teal);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+}
+
+.iconWrapperRed {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+}
+
+.iconWrapperBlue {
+    background-color: rgba(56, 189, 248, 0.1);
+    color: #38bdf8;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+}
+
+.iconWrapperPurple {
+    background-color: rgba(168, 85, 247, 0.1);
+    color: var(--purple);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+}
+
+.metricIcon {
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke-width: 2.5px;
+}
+
+.metricValue {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--foreground);
+    line-height: 1;
+}
+
+/* Card Full Width for Table */
+.cardFullWidth {
+    background-color: var(--dark-grey);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.cardTitle {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+.dateDropdownBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--foreground);
+    cursor: pointer;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.dateDropdownBtn:hover {
+    border-color: var(--teal);
+}
+
+/* Table Shadcn Style */
+.tableContainer {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 0.5rem;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+}
+
+.shadcnTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.shadcnTable th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    color: #94a3b8;
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+}
+
+.trBody {
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.2s;
+}
+
+.trBody:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.trBody:last-child {
+    border-bottom: none;
+}
+
+.tdTextBold {
+    padding: 1rem;
+    color: var(--foreground);
+    font-weight: 600;
+}
+
+.tdText {
+    padding: 1rem;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+/* Badges */
+.badgeSuccess {
+    background-color: rgba(20, 184, 166, 0.1);
+    color: var(--teal);
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badgeWarning {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badgeNeutral {
+    background-color: rgba(148, 163, 184, 0.1);
+    color: #94a3b8;
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+    .container {
+        padding: 1.5rem 1rem;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+}

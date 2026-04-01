@@ -1,0 +1,410 @@
+.container {
+    padding: 1.5rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    font-family: var(--font-display), Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--foreground);
+    letter-spacing: normal;
+}
+
+.primaryBtn {
+    background-color: var(--teal);
+    color: var(--background);
+    padding: 0.65rem 1rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-display), Arial, sans-serif;
+}
+
+.primaryBtn:hover {
+    background-color: #0f766e;
+}
+
+.metricsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.metricCard {
+    background-color: var(--dark-grey);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.metricLabel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.iconWrapperPurple {
+    background-color: rgba(168, 85, 247, 0.1);
+    color: var(--purple);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+}
+
+.iconWrapperTeal {
+    background-color: rgba(20, 184, 166, 0.1);
+    color: var(--teal);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+}
+
+.iconWrapperOrange {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+}
+
+.metricValue {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--foreground);
+    line-height: 1;
+}
+
+.metricValueTeal {
+    color: var(--teal);
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.metricValuePurple {
+    color: var(--purple);
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.metricValueOrange {
+    color: #f59e0b;
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.sectionCard {
+    background-color: var(--dark-grey);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.sectionTitle {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--foreground);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.logItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+    background-color: rgba(255, 255, 255, 0.02);
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.logText {
+    color: var(--foreground);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logIcon {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.logTime {
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+.tableContainer {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.adminTable {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+.adminTable th {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    color: #94a3b8;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+}
+
+.adminTable td {
+    padding: 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--foreground);
+    font-size: 0.95rem;
+}
+
+.statusBadge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+}
+
+.statusActive {
+    background-color: rgba(20, 184, 166, 0.1);
+    color: var(--teal);
+    border: 1px solid rgba(20, 184, 166, 0.2);
+}
+
+.statusInactive {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.statusPending {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.statusDone {
+    background-color: rgba(168, 85, 247, 0.1);
+    color: var(--purple);
+    border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.actionBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.4rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.actionBtnEdit {
+    color: #f59e0b;
+    margin-right: 0.25rem;
+}
+
+.actionBtnDelete {
+    color: #ef4444;
+}
+
+.searchContainer {
+    position: relative;
+    max-width: 350px;
+    width: 100%;
+}
+
+.searchInput {
+    width: 100%;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+    padding: 0.65rem 1rem 0.65rem 2.5rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    outline: none;
+    font-family: var(--font-display), Arial, sans-serif;
+    transition: border-color 0.2s;
+}
+
+.searchInput:focus {
+    border-color: var(--teal);
+}
+
+.searchIcon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.label {
+    color: #94a3b8;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.inputField {
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    outline: none;
+    font-family: var(--font-display), Arial, sans-serif;
+}
+
+.inputField:focus {
+    border-color: var(--teal);
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.modalContent {
+    background-color: var(--dark-grey);
+    border: 1px solid var(--border);
+    border-radius: 1.5rem;
+    width: 100%;
+    max-width: 650px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.modalTitle {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--foreground);
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+    .formGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.textArea {
+    width: 100%;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+    padding: 1rem;
+    border-radius: 0.75rem;
+    min-height: 120px;
+    resize: vertical;
+    font-family: inherit;
+    outline: none;
+}
+
+.textArea:focus {
+    border-color: var(--teal);
+}
+
+.modalActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.secondaryBtn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--foreground);
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    cursor: pointer;
+}
