@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, Suspense } from 'react';
 import styles from './page.module.css';
 import { Check, ArrowLeft, Plus, CalendarDays, AlertCircle, Clock, FileCheck, Send, Trash2, Activity, LayoutList, CheckCircle2, MessageSquare, User, Loader2, Search } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import { useSearchParams } from 'next/navigation';
 import { useTodo } from '../../contexts/TodoContext';
 import { useUser } from '../../contexts/UserContext';
 
@@ -36,9 +37,12 @@ interface TaskMessage {
     sender?: { id: string; full_name: string; avatar_url: string | null };
 }
 
-export default function TaskPage() {
+function TaskPageContent() {
     const { user } = useUser();
     const { todos, addTodo, toggleTodo } = useTodo();
+
+    const searchParams = useSearchParams();
+    const taskIdFromQuery = searchParams.get('taskId');
 
     const [activeView, setActiveView] = useState<'board' | 'table'>('board');
     const [currentPage, setCurrentPage] = useState(1);
@@ -76,7 +80,13 @@ export default function TaskPage() {
         setLoading(true);
         const res = await fetch(`/api/tasks?user_id=${user.id}`);
         const data = await res.json();
-        if (Array.isArray(data)) setTasks(data);
+        if (Array.isArray(data)) {
+            setTasks(data);
+            if (taskIdFromQuery) {
+                const match = data.find((t: Task) => t.id === taskIdFromQuery);
+                if (match) setSelectedTask(match);
+            }
+        }
         setLoading(false);
     };
 
@@ -360,5 +370,13 @@ export default function TaskPage() {
                 </div>
             )}
         </div>
+    );
+}
+
+export default function TaskPage() {
+    return (
+        <Suspense fallback={<div style={{ padding: '2rem', color: '#94a3b8' }}>Memuat…</div>}>
+            <TaskPageContent />
+        </Suspense>
     );
 }

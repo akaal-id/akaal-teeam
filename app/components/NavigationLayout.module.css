@@ -103,6 +103,124 @@
     position: relative;
 }
 
+.notificationContainer {
+    position: relative;
+}
+
+.notificationBadge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    padding: 0 0.25rem;
+    border-radius: 9999px;
+    background-color: #ef4444;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--dark-grey);
+}
+
+.notificationDropdown {
+    position: absolute;
+    top: 130%;
+    right: 0;
+    width: 320px;
+    background-color: var(--dark-grey);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideDown 0.2s ease-out forwards;
+}
+
+.notificationDropdownHeader {
+    padding: 0.9rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.notificationDropdownTitle {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--foreground);
+}
+
+.notificationMarkAllBtn {
+    background: none;
+    border: none;
+    color: var(--teal);
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 0;
+    white-space: nowrap;
+}
+
+.notificationMarkAllBtn:hover {
+    text-decoration: underline;
+}
+
+.notificationEmpty {
+    padding: 1.25rem 1rem;
+    text-align: center;
+    color: #94a3b8;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.notificationList {
+    padding: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    max-height: 360px;
+    overflow-y: auto;
+}
+
+.notificationItem {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    color: var(--foreground);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.notificationItem:hover {
+    background-color: var(--border);
+}
+
+.notificationItemTitle {
+    font-size: 0.9rem;
+    font-weight: 800;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.notificationItemMeta {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 700;
+}
+
 .profileAvatarBtn {
     background: none;
     border: 2px solid transparent;
