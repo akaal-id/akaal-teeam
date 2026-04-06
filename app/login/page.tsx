@@ -86,7 +86,7 @@ export default function LoginPage() {
                                 type="text"
                                 id="loginIdentifier"
                                 className={styles.inputField}
-                                placeholder="nama@akaal.team atau ID Admin"
+                                placeholder="Masukkan Email"
                                 value={identifier}
                                 onChange={(e) => setIdentifier(e.target.value)}
                                 required
