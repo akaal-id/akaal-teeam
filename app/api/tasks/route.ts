@@ -6,21 +6,27 @@ const supabaseAdmin = createClient(
     process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-// GET all tasks (optionally filtered by user_id)
+const TASK_SELECT = `*, assignee:profiles!tasks_assignee_id_fkey(id, full_name, username, email), assignor:profiles!tasks_assignor_id_fkey(id, full_name)`;
+
+// GET — semua task | filter user_id | atau satu task by id (untuk admin / deep link)
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
     const userId = searchParams.get('user_id');
 
-    let query = supabaseAdmin
-        .from('tasks')
-        .select(`*, assignee:profiles!tasks_assignee_id_fkey(id, full_name, username, email), assignor:profiles!tasks_assignor_id_fkey(id, full_name)`)
-        .order('created_at', { ascending: false });
+    if (id) {
+        const { data, error } = await supabaseAdmin.from('tasks').select(TASK_SELECT).eq('id', id).maybeSingle();
+        if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+        if (!data) return NextResponse.json({ error: 'Task tidak ditemukan.' }, { status: 404 });
+        return NextResponse.json(data);
+    }
+
+    let query = supabaseAdmin.from('tasks').select(TASK_SELECT).order('created_at', { ascending: false });
 
     if (userId) {
-        // Get tasks assigned to user OR created by user
         query = supabaseAdmin
             .from('tasks')
-            .select(`*, assignee:profiles!tasks_assignee_id_fkey(id, full_name, username, email), assignor:profiles!tasks_assignor_id_fkey(id, full_name)`)
+            .select(TASK_SELECT)
             .or(`assignee_id.eq.${userId},assignor_id.eq.${userId}`)
             .order('created_at', { ascending: false });
     }

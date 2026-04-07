@@ -1,7 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import styles from '../admin.module.css';
-import { Trash2, Edit2, Search, Plus, X, User, Loader2, ExternalLink, Check, AlertCircle } from 'lucide-react';
+import { Trash2, Edit2, Search, Plus, X, User, Loader2, ExternalLink, Check, AlertCircle, Eye } from 'lucide-react';
 
 interface Task {
     id: string;
@@ -169,7 +170,15 @@ export default function AdminTasksPage() {
                                                     {t.status}{t.status === 'On Preview' && ' ⚡'}
                                                 </span>
                                             </td>
-                                            <td style={{ textAlign: 'right' }}>
+                                            <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+                                                <Link
+                                                    href={`/task?taskId=${encodeURIComponent(t.id)}&from=admin`}
+                                                    className={`${styles.actionBtn}`}
+                                                    style={{ color: 'var(--teal)', marginRight: '0.25rem', display: 'inline-flex', textDecoration: 'none' }}
+                                                    title="Buka halaman task (seperti karyawan)"
+                                                >
+                                                    <Eye size={16} />
+                                                </Link>
                                                 <button className={`${styles.actionBtn} ${styles.actionBtnEdit}`} onClick={() => openModal(t)} title="Edit / Review"><Edit2 size={16} /></button>
                                                 <button className={`${styles.actionBtn} ${styles.actionBtnDelete}`} onClick={() => handleDelete(t.id)} title="Hapus"><Trash2 size={16} /></button>
                                             </td>

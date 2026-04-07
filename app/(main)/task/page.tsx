@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useRef, Suspense } from 'react';
+import React, { useState, useEffect, useMemo, useRef, Suspense, useCallback } from 'react';
+import Link from 'next/link';
 import styles from './page.module.css';
 import { Check, ArrowLeft, Plus, CalendarDays, AlertCircle, Clock, FileCheck, Send, Trash2, Activity, LayoutList, CheckCircle2, MessageSquare, User, Loader2, Search } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -43,6 +44,7 @@ function TaskPageContent() {
 
     const searchParams = useSearchParams();
     const taskIdFromQuery = searchParams.get('taskId');
+    const fromAdmin = searchParams.get('from') === 'admin';
 
     const [activeView, setActiveView] = useState<'board' | 'table'>('board');
     const [currentPage, setCurrentPage] = useState(1);
@@ -51,6 +53,7 @@ function TaskPageContent() {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [allUsers, setAllUsers] = useState<{ id: string; full_name: string }[]>([]);
     const [loading, setLoading] = useState(true);
+    const [taskLoadError, setTaskLoadError] = useState('');
 
     const [isCreatingTask, setIsCreatingTask] = useState(false);
     const [selectedTask, setSelectedTask] = useState<Task | null>(null);
@@ -75,36 +78,69 @@ function TaskPageContent() {
     const [dateFilter, setDateFilter] = useState('');
     const [newTodoText, setNewTodoText] = useState('');
 
-    const fetchTasks = async () => {
-        if (!user?.id) return;
-        setLoading(true);
-        const res = await fetch(`/api/tasks?user_id=${user.id}`);
-        const data = await res.json();
-        if (Array.isArray(data)) {
-            setTasks(data);
-            if (taskIdFromQuery) {
-                const match = data.find((t: Task) => t.id === taskIdFromQuery);
-                if (match) setSelectedTask(match);
-            }
+    const loadTasks = useCallback(async () => {
+        if (!user?.id && !taskIdFromQuery) {
+            setLoading(false);
+            setTasks([]);
+            setSelectedTask(null);
+            setTaskLoadError('');
+            return;
         }
-        setLoading(false);
-    };
 
-    const fetchUsers = async () => {
-        const res = await fetch('/api/admin/users');
-        const data = await res.json();
-        if (Array.isArray(data)) setAllUsers(data.map((u: any) => ({ id: u.id, full_name: u.full_name || u.name })));
-    };
+        setLoading(true);
+        setTaskLoadError('');
+        let merged: Task[] = [];
+
+        if (taskIdFromQuery) {
+            const res = await fetch(`/api/tasks?id=${encodeURIComponent(taskIdFromQuery)}`);
+            const data = await res.json();
+            if (!res.ok || data?.error) {
+                setTaskLoadError(typeof data?.error === 'string' ? data.error : 'Task tidak ditemukan.');
+                setTasks([]);
+                setSelectedTask(null);
+                setLoading(false);
+                return;
+            }
+            merged = [data as Task];
+            setSelectedTask(data as Task);
+        }
+
+        if (user?.id) {
+            const res = await fetch(`/api/tasks?user_id=${user.id}`);
+            const data = await res.json();
+            if (Array.isArray(data)) {
+                const byId = new Map<string, Task>();
+                merged.forEach(t => byId.set(t.id, t));
+                data.forEach((t: Task) => byId.set(t.id, t));
+                merged = Array.from(byId.values());
+                setTasks(merged);
+                if (taskIdFromQuery) {
+                    const match = merged.find(x => x.id === taskIdFromQuery);
+                    if (match) setSelectedTask(match);
+                }
+            }
+        } else {
+            setTasks(merged);
+        }
+
+        if (user?.id) {
+            const res = await fetch('/api/admin/users');
+            const data = await res.json();
+            if (Array.isArray(data)) setAllUsers(data.map((u: any) => ({ id: u.id, full_name: u.full_name || u.name })));
+        }
+
+        setLoading(false);
+    }, [user?.id, taskIdFromQuery]);
+
+    useEffect(() => {
+        void loadTasks();
+    }, [loadTasks]);
 
     const fetchMessages = async (taskId: string) => {
         const res = await fetch(`/api/tasks/messages?task_id=${taskId}`);
         const data = await res.json();
         if (Array.isArray(data)) setTaskMessages(data);
     };
-
-    useEffect(() => {
-        if (user?.id) { fetchTasks(); fetchUsers(); }
-    }, [user]);
 
     useEffect(() => {
         if (selectedTask) {
@@ -152,7 +188,7 @@ function TaskPageContent() {
     const handleApprove = async (taskId: string) => {
         await fetch('/api/tasks', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: taskId, status: 'Done' }) });
         await fetch('/api/tasks/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ task_id: taskId, sender_id: user?.id, message: '✅ Tugas telah disetujui (Done).' }) });
-        fetchTasks();
+        void loadTasks();
         if (selectedTask?.id === taskId) setSelectedTask({ ...selectedTask, status: 'Done' });
     };
 
@@ -163,7 +199,7 @@ function TaskPageContent() {
         await fetch('/api/tasks', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: taskId, status: 'In Progress' }) });
         await fetch('/api/tasks/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ task_id: taskId, sender_id: user?.id, message: `⚠️ MINTA REVISI: ${msg}` }) });
 
-        fetchTasks();
+        void loadTasks();
         if (selectedTask?.id === taskId) setSelectedTask({ ...selectedTask, status: 'In Progress' });
     };
 
@@ -173,14 +209,15 @@ function TaskPageContent() {
         await fetch('/api/tasks/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ task_id: taskId, sender_id: user?.id, message: `📤 SUBMIT PEKERJAAN: ${submitLinkInput}` }) });
 
         setSubmitLinkInput('');
-        fetchTasks();
+        void loadTasks();
         if (selectedTask?.id === taskId) setSelectedTask({ ...selectedTask, status: 'On Preview', submitted_link: submitLinkInput });
     };
 
     const handleDeleteTask = async (taskId: string) => {
         if (!confirm('Hapus task ini?')) return;
         await fetch(`/api/tasks?id=${taskId}`, { method: 'DELETE' });
-        fetchTasks(); setSelectedTask(null);
+        void loadTasks();
+        setSelectedTask(null);
     };
 
     const handleAddTodo = (e: React.FormEvent) => {
@@ -189,6 +226,7 @@ function TaskPageContent() {
     };
 
     const myTasks = tasks.filter(t => t.assignee_id === user?.id);
+    const readOnly = !user;
 
     const handleSubmitNewTask = async () => {
         if (!formTitle || !formAssigneeId) { alert('Judul dan penerima tugas wajib diisi.'); return; }
@@ -200,7 +238,7 @@ function TaskPageContent() {
             await fetch('/api/tasks', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         }
         setIsCreatingTask(false); setEditTaskId(null); setFormTitle(''); setFormAssigneeId(''); setQuillData(''); setFormDueDate('');
-        fetchTasks();
+        void loadTasks();
     };
 
     const getStatusClass = (status: string) => {
@@ -210,31 +248,105 @@ function TaskPageContent() {
 
     if (loading) return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '60vh', gap: '1rem', color: '#94a3b8' }}><Loader2 size={24} /> Memuat data task...</div>;
 
+    if (!user && !taskIdFromQuery) {
+        return (
+            <div className={styles.taskContainer} style={{ padding: '3rem', textAlign: 'center' }}>
+                <h1 className={styles.headerTitle}>Task</h1>
+                <p style={{ color: '#94a3b8', marginTop: '0.5rem' }}>Login untuk melihat daftar tugas Anda.</p>
+                <Link href="/login" className={styles.primaryBtn} style={{ display: 'inline-flex', marginTop: '1.5rem', textDecoration: 'none' }}>
+                    Ke halaman login
+                </Link>
+            </div>
+        );
+    }
+
+    if (taskLoadError && taskIdFromQuery) {
+        return (
+            <div className={styles.taskContainer} style={{ padding: '3rem' }}>
+                <p style={{ color: '#f87171' }}>{taskLoadError}</p>
+                {fromAdmin ? (
+                    <Link href="/admin/tasks" className={styles.outlineBtn} style={{ display: 'inline-flex', marginTop: '1rem', textDecoration: 'none' }}>
+                        ← Kembali ke Admin Tasks
+                    </Link>
+                ) : (
+                    <Link href="/task" className={styles.outlineBtn} style={{ display: 'inline-flex', marginTop: '1rem', textDecoration: 'none' }}>
+                        Ke Task
+                    </Link>
+                )}
+            </div>
+        );
+    }
+
     return (
         <div className={styles.taskContainer}>
             <header className={styles.headerAction}>
-                <div><h1 className={styles.headerTitle}>Manajemen Pekerjaan</h1><p className={styles.subtitle}>Sinkronisasi tugas dan history diskusi tim.</p></div>
-                <button className={styles.outlineBtn} onClick={() => { setActiveView('board'); setIsCreatingTask(!isCreatingTask); setSelectedTask(null); }}>
-                    {isCreatingTask ? <><ArrowLeft size={16} /> Kembali</> : <><Plus size={16} /> Buat Task Baru</>}
-                </button>
+                <div>
+                    <h1 className={styles.headerTitle}>Manajemen Pekerjaan</h1>
+                    <p className={styles.subtitle}>
+                        {fromAdmin ? (
+                            <>
+                                Pratinjau dari admin —{' '}
+                                <Link href="/admin/tasks" style={{ color: 'var(--teal)' }}>
+                                    kembali ke Master Task
+                                </Link>
+                            </>
+                        ) : (
+                            'Sinkronisasi tugas dan history diskusi tim.'
+                        )}
+                    </p>
+                </div>
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                    {fromAdmin && (
+                        <Link href="/admin/tasks" className={styles.outlineBtn} style={{ textDecoration: 'none' }}>
+                            <ArrowLeft size={16} /> Admin
+                        </Link>
+                    )}
+                    {!readOnly && (
+                        <button className={styles.outlineBtn} onClick={() => { setActiveView('board'); setIsCreatingTask(!isCreatingTask); setSelectedTask(null); }}>
+                            {isCreatingTask ? <><ArrowLeft size={16} /> Kembali</> : <><Plus size={16} /> Buat Task Baru</>}
+                        </button>
+                    )}
+                </div>
             </header>
 
-            <div className={styles.metricsContainer}>
-                <div className={styles.metricsGridThree}>
-                    <div className={styles.metricCard}><div className={styles.metricHeaderBlock}><h3 className={styles.metricTitleBlk}>Pending</h3><Activity className={styles.iconTeal} /></div><p className={styles.metricValueLg}>{tasks.filter(t => t.status !== 'Done').length}</p></div>
-                    <div className={styles.metricCard}><div className={styles.metricHeaderBlock}><h3 className={styles.metricTitleBlk}>Selesai</h3><CheckCircle2 className={styles.iconTeal} /></div><p className={styles.metricValueLg}>{tasks.filter(t => t.status === 'Done').length}</p></div>
-                    <div className={styles.metricCard}><div className={styles.metricHeaderBlock}><h3 className={styles.metricTitleBlk}>Total</h3><LayoutList className={styles.iconTeal} /></div><p className={styles.metricValueLg}>{tasks.length}</p></div>
-                </div>
-            </div>
+            {!readOnly && (
+                <>
+                    <div className={styles.metricsContainer}>
+                        <div className={styles.metricsGridThree}>
+                            <div className={styles.metricCard}><div className={styles.metricHeaderBlock}><h3 className={styles.metricTitleBlk}>Pending</h3><Activity className={styles.iconTeal} /></div><p className={styles.metricValueLg}>{tasks.filter(t => t.status !== 'Done').length}</p></div>
+                            <div className={styles.metricCard}><div className={styles.metricHeaderBlock}><h3 className={styles.metricTitleBlk}>Selesai</h3><CheckCircle2 className={styles.iconTeal} /></div><p className={styles.metricValueLg}>{tasks.filter(t => t.status === 'Done').length}</p></div>
+                            <div className={styles.metricCard}><div className={styles.metricHeaderBlock}><h3 className={styles.metricTitleBlk}>Total</h3><LayoutList className={styles.iconTeal} /></div><p className={styles.metricValueLg}>{tasks.length}</p></div>
+                        </div>
+                    </div>
 
-            <div className={styles.tabContainer}>
-                <button onClick={() => { setActiveView('board'); setSelectedTask(null); }} style={{ background: 'none', border: 'none', color: activeView === 'board' ? 'var(--teal)' : '#64748b', borderBottom: activeView === 'board' ? '2px solid var(--teal)' : 'none', padding: '0.75rem 0', fontWeight: 600, cursor: 'pointer' }}>Kanban Board</button>
-                <button onClick={() => { setActiveView('table'); setSelectedTask(null); }} style={{ background: 'none', border: 'none', color: activeView === 'table' ? 'var(--teal)' : '#64748b', borderBottom: activeView === 'table' ? '2px solid var(--teal)' : 'none', padding: '0.75rem 0', fontWeight: 600, cursor: 'pointer' }}>Tabel History</button>
-            </div>
+                    <div className={styles.tabContainer}>
+                        <button onClick={() => { setActiveView('board'); setSelectedTask(null); }} style={{ background: 'none', border: 'none', color: activeView === 'board' ? 'var(--teal)' : '#64748b', borderBottom: activeView === 'board' ? '2px solid var(--teal)' : 'none', padding: '0.75rem 0', fontWeight: 600, cursor: 'pointer' }}>Kanban Board</button>
+                        <button onClick={() => { setActiveView('table'); setSelectedTask(null); }} style={{ background: 'none', border: 'none', color: activeView === 'table' ? 'var(--teal)' : '#64748b', borderBottom: activeView === 'table' ? '2px solid var(--teal)' : 'none', padding: '0.75rem 0', fontWeight: 600, cursor: 'pointer' }}>Tabel History</button>
+                    </div>
+                </>
+            )}
+
+            {readOnly && selectedTask && (
+                <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1rem', padding: '0.75rem 1rem', background: 'rgba(168, 85, 247, 0.08)', borderRadius: '0.5rem', border: '1px solid rgba(168, 85, 247, 0.2)' }}>
+                    Tampilan pratinjau (tanpa login). Untuk mengirim pesan atau mengubah status, login sebagai karyawan terkait.
+                </p>
+            )}
 
             {selectedTask ? (
                 <div className={styles.cardFullWidth}>
-                    <button className={styles.btnTextBack} onClick={() => setSelectedTask(null)} style={{ marginBottom: '1.5rem' }}><ArrowLeft size={16} /> Kembali</button>
+                    <button
+                        className={styles.btnTextBack}
+                        onClick={() => {
+                            if (readOnly && fromAdmin) {
+                                window.location.href = '/admin/tasks';
+                                return;
+                            }
+                            setSelectedTask(null);
+                        }}
+                        style={{ marginBottom: '1.5rem' }}
+                    >
+                        <ArrowLeft size={16} /> {readOnly && fromAdmin ? 'Kembali ke Admin' : 'Kembali'}
+                    </button>
                     <div className={styles.detailGrid}>
                         <div>
                             <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.75rem' }}>{selectedTask.title}</h2>
@@ -263,8 +375,16 @@ function TaskPageContent() {
                                         <div ref={chatEndRef} />
                                     </div>
                                     <form onSubmit={handleSendMessage} className={styles.chatInputWrapper}>
-                                        <input className={styles.chatInput} placeholder="Tulis catatan atau update di sini..." value={newMessage} onChange={e => setNewMessage(e.target.value)} />
-                                        <button type="submit" className={styles.sendBtn}><Send size={16} /></button>
+                                        <input
+                                            className={styles.chatInput}
+                                            placeholder={readOnly ? 'Login untuk mengirim pesan…' : 'Tulis catatan atau update di sini...'}
+                                            value={newMessage}
+                                            onChange={e => setNewMessage(e.target.value)}
+                                            disabled={readOnly}
+                                        />
+                                        <button type="submit" className={styles.sendBtn} disabled={readOnly}>
+                                            <Send size={16} />
+                                        </button>
                                     </form>
                                 </div>
                             </div>
@@ -274,13 +394,13 @@ function TaskPageContent() {
                             <div className={styles.formGroup}><label className={styles.label}>Pemberi Tugas</label><div className={styles.sidebarUser}><User size={14} /> {selectedTask.assignor?.full_name || '-'}</div></div>
                             <div className={styles.formGroup}><label className={styles.label}>Kategori</label><p>{selectedTask.category}</p></div>
                             <div style={{ marginTop: '2rem' }}>
-                                {selectedTask.status === 'On Preview' && selectedTask.assignor_id === user?.id && (
+                                {!readOnly && selectedTask.status === 'On Preview' && selectedTask.assignor_id === user?.id && (
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                         <button className={styles.primaryBtn} onClick={() => handleApprove(selectedTask.id)} style={{ width: '100%', margin: 0 }}><Check size={16} /> Approve & Selesaikan</button>
                                         <button className={styles.outlineBtn} onClick={() => handleRequestRevision(selectedTask.id)} style={{ width: '100%', justifyContent: 'center' }}><AlertCircle size={16} /> Minta Revisi</button>
                                     </div>
                                 )}
-                                {selectedTask.assignee_id === user?.id && selectedTask.status !== 'Done' && selectedTask.status !== 'On Preview' && (
+                                {!readOnly && selectedTask.assignee_id === user?.id && selectedTask.status !== 'Done' && selectedTask.status !== 'On Preview' && (
                                     <div className={styles.submitArea}>
                                         <label className={styles.label} style={{ color: 'var(--teal)' }}>Submit Pekerjaan</label>
                                         <input className={styles.shadcnInput} style={{ marginBottom: '0.75rem' }} value={submitLinkInput} onChange={e => setSubmitLinkInput(e.target.value)} placeholder="Link hasil (GDocs/Figma)" />
@@ -288,13 +408,18 @@ function TaskPageContent() {
                                     </div>
                                 )}
                             </div>
-                            {selectedTask.assignor_id === user?.id && (
+                            {!readOnly && selectedTask.assignor_id === user?.id && (
                                 <button onClick={() => handleDeleteTask(selectedTask.id)} style={{ width: '100%', marginTop: 'auto', background: 'none', border: '1px solid rgba(239,68,68,0.2)', color: '#ef4444', borderRadius: '0.5rem', padding: '0.5rem', cursor: 'pointer', fontSize: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}>
                                     <Trash2 size={12} /> Hapus Permanen
                                 </button>
                             )}
                         </div>
                     </div>
+                </div>
+            ) : readOnly ? (
+                <div style={{ padding: '2rem', color: '#64748b' }}>
+                    Pratinjau tidak tersedia. Pastikan URL memuat parameter <code>taskId</code> yang benar, atau{' '}
+                    <Link href="/login" style={{ color: 'var(--teal)' }}>login</Link> sebagai karyawan.
                 </div>
             ) : activeView === 'board' ? (
                 isCreatingTask ? (
@@ -332,7 +457,7 @@ function TaskPageContent() {
                         <div className={styles.card}>
                             <h2 className={styles.cardTitle}>Daftar To-Do</h2>
                             <form onSubmit={handleAddTodo} style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-                                <input className={styles.shadcnInput} placeholder="Input to-do..." value={newMessage} onChange={e => setNewTodoText(e.target.value)} />
+                                <input className={styles.shadcnInput} placeholder="Input to-do..." value={newTodoText} onChange={e => setNewTodoText(e.target.value)} />
                                 <button type="submit" className={styles.iconBtn}><Plus size={16} /></button>
                             </form>
                             <div className={styles.todoList}>
