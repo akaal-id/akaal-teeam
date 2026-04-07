@@ -69,7 +69,8 @@ export function NotificationsBell() {
                                             return;
                                         }
                                         if (item.taskId) {
-                                            router.push(`/task?taskId=${item.taskId}`);
+                                            const isAdmin = (user?.role || '').toLowerCase().includes('admin');
+                                            router.push(isAdmin ? `/admin/tasks?taskId=${item.taskId}` : `/task?taskId=${item.taskId}`);
                                         }
                                     }}
                                     type="button"

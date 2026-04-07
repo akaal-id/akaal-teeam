@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, useRef, Suspense, useCallback } from 'react';
 import Link from 'next/link';
 import styles from './page.module.css';
-import { Check, ArrowLeft, Plus, CalendarDays, AlertCircle, Clock, FileCheck, Send, Trash2, Activity, LayoutList, CheckCircle2, MessageSquare, User, Loader2, Search } from 'lucide-react';
+import { Check, ArrowLeft, Plus, CalendarDays, AlertCircle, Clock, FileCheck, Send, Trash2, Activity, LayoutList, CheckCircle2, MessageSquare, User, Loader2, Search, X } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
 import { useTodo } from '../../contexts/TodoContext';
@@ -40,7 +40,7 @@ interface TaskMessage {
 
 function TaskPageContent() {
     const { user } = useUser();
-    const { todos, addTodo, toggleTodo } = useTodo();
+    const { todos, addTodo, removeTodo, toggleTodo } = useTodo();
 
     const searchParams = useSearchParams();
     const taskIdFromQuery = searchParams.get('taskId');
@@ -465,6 +465,17 @@ function TaskPageContent() {
                                     <div key={todo.id} className={styles.todoItem} onClick={() => toggleTodo(todo.id)}>
                                         <div className={`${styles.shadcnCheckbox} ${todo.completed ? styles.shadcnCheckboxChecked : ''}`}>{todo.completed && <Check size={12} />}</div>
                                         <span className={todo.completed ? styles.todoTextStrike : ''}>{todo.text}</span>
+                                        <button
+                                            type="button"
+                                            onClick={e => {
+                                                e.stopPropagation();
+                                                void removeTodo(todo.id);
+                                            }}
+                                            style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}
+                                            aria-label="Hapus todo"
+                                        >
+                                            <X size={14} />
+                                        </button>
                                     </div>
                                 ))}
                             </div>

@@ -45,7 +45,10 @@ export default function AdminTasksPage() {
         setLoading(true);
         const res = await fetch('/api/tasks');
         const data = await res.json();
-        if (Array.isArray(data)) setTasks(data);
+        if (Array.isArray(data)) {
+            setTasks(data);
+            tryOpenFromQuery(data as Task[]);
+        }
         setLoading(false);
     };
 
@@ -59,6 +62,16 @@ export default function AdminTasksPage() {
         fetchTasks();
         fetchUsers();
     }, []);
+
+
+    const tryOpenFromQuery = (taskList: Task[]) => {
+        if (typeof window === 'undefined') return;
+        const params = new URLSearchParams(window.location.search);
+        const taskId = params.get('taskId');
+        if (!taskId) return;
+        const hit = taskList.find(t => t.id === taskId);
+        if (hit) openModal(hit);
+    };
 
     const openModal = (task: Task | null = null) => {
         if (task) {
@@ -172,7 +185,7 @@ export default function AdminTasksPage() {
                                             </td>
                                             <td style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
                                                 <Link
-                                                    href={`/task?taskId=${encodeURIComponent(t.id)}&from=admin`}
+                                                    href={`/admin/tasks?taskId=${encodeURIComponent(t.id)}`}
                                                     className={`${styles.actionBtn}`}
                                                     style={{ color: 'var(--teal)', marginRight: '0.25rem', display: 'inline-flex', textDecoration: 'none' }}
                                                     title="Buka halaman task (seperti karyawan)"

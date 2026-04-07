@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { Menu, LayoutDashboard, Target, FileBarChart, Trophy, LogOut, UserCircle, Clock } from 'lucide-react';
+import { Menu, LayoutDashboard, Target, FileBarChart, Trophy, LogOut, UserCircle, Clock, ListChecks } from 'lucide-react';
 import styles from './NavigationLayout.module.css';
 import { AttendanceProvider } from '../contexts/AttendanceContext';
 import { TodoProvider } from '../contexts/TodoContext';
@@ -124,6 +124,10 @@ export default function NavigationLayout({ children }: { children: React.ReactNo
                                             <FileBarChart className={styles.sidebarIcon} />
                                             <span className={`${styles.navText} ${!isSidebarOpen ? styles.navTextHidden : ''}`}>Task</span>
                                         </Link>
+                                        <Link href="/workflow" className={`${styles.navLink} ${isActive('/workflow') ? styles.activeNavLink : ''}`} title="Workflow">
+                                            <ListChecks className={styles.sidebarIcon} />
+                                            <span className={`${styles.navText} ${!isSidebarOpen ? styles.navTextHidden : ''}`}>Workflow</span>
+                                        </Link>
                                     </nav>
                                 </aside>
 
@@ -153,6 +157,10 @@ export default function NavigationLayout({ children }: { children: React.ReactNo
                                 <Link href="/task" className={`${styles.bottomNavLink} ${isActive('/task') ? styles.activeBottomNavLink : ''}`}>
                                     <FileBarChart className={styles.bottomNavIcon} />
                                     <span className={styles.bottomNavText}>Task</span>
+                                </Link>
+                                <Link href="/workflow" className={`${styles.bottomNavLink} ${isActive('/workflow') ? styles.activeBottomNavLink : ''}`}>
+                                    <ListChecks className={styles.bottomNavIcon} />
+                                    <span className={styles.bottomNavText}>Flow</span>
                                 </Link>
                             </nav>
                         </div>

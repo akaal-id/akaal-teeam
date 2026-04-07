@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { Menu, LayoutDashboard, Users, Settings, LogOut, Briefcase, FileText, Clock } from 'lucide-react';
+import { Menu, LayoutDashboard, Users, Settings, LogOut, Briefcase, FileText, Clock, ListChecks, CalendarDays } from 'lucide-react';
 import styles from './AdminLayout.module.css';
 import { NotificationsBell } from './NotificationsBell';
 
@@ -59,6 +59,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                             <Briefcase className={styles.sidebarIcon} />
                             <span className={`${styles.navText} ${!isSidebarOpen ? styles.navTextHidden : ''}`}>Master Task</span>
                         </Link>
+                        <Link href="/admin/workflow" className={`${styles.navLink} ${pathname?.startsWith('/admin/workflow') ? styles.activeNavLink : ''}`} title="Workflow">
+                            <ListChecks className={styles.sidebarIcon} />
+                            <span className={`${styles.navText} ${!isSidebarOpen ? styles.navTextHidden : ''}`}>Workflow</span>
+                        </Link>
+                        <Link href="/admin/agenda" className={`${styles.navLink} ${pathname?.startsWith('/admin/agenda') ? styles.activeNavLink : ''}`} title="Agenda Events">
+                            <CalendarDays className={styles.sidebarIcon} />
+                            <span className={`${styles.navText} ${!isSidebarOpen ? styles.navTextHidden : ''}`}>Agenda</span>
+                        </Link>
                         <Link href="/admin/izin" className={`${styles.navLink} ${pathname?.startsWith('/admin/izin') ? styles.activeNavLink : ''}`} title="Izin & Sakit">
                             <FileText className={styles.sidebarIcon} />
                             <span className={`${styles.navText} ${!isSidebarOpen ? styles.navTextHidden : ''}`}>Izin & Sakit</span>
@@ -80,6 +88,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <Link href="/admin/users" className={`${styles.bottomNavLink} ${pathname?.startsWith('/admin/users') ? styles.activeBottomNavLink : ''}`}><Users className={styles.bottomNavIcon} /><span className={styles.bottomNavText}>Users</span></Link>
                 <Link href="/admin/kehadiran" className={`${styles.bottomNavLink} ${pathname?.startsWith('/admin/kehadiran') ? styles.activeBottomNavLink : ''}`}><Clock className={styles.bottomNavIcon} /><span className={styles.bottomNavText}>Absen</span></Link>
                 <Link href="/admin/tasks" className={`${styles.bottomNavLink} ${pathname?.startsWith('/admin/tasks') ? styles.activeBottomNavLink : ''}`}><Briefcase className={styles.bottomNavIcon} /><span className={styles.bottomNavText}>Tasks</span></Link>
+                <Link href="/admin/workflow" className={`${styles.bottomNavLink} ${pathname?.startsWith('/admin/workflow') ? styles.activeBottomNavLink : ''}`}><ListChecks className={styles.bottomNavIcon} /><span className={styles.bottomNavText}>Flow</span></Link>
+                <Link href="/admin/agenda" className={`${styles.bottomNavLink} ${pathname?.startsWith('/admin/agenda') ? styles.activeBottomNavLink : ''}`}><CalendarDays className={styles.bottomNavIcon} /><span className={styles.bottomNavText}>Agenda</span></Link>
                 <Link href="/admin/izin" className={`${styles.bottomNavLink} ${pathname?.startsWith('/admin/izin') ? styles.activeBottomNavLink : ''}`}><FileText className={styles.bottomNavIcon} /><span className={styles.bottomNavText}>Izin</span></Link>
                 <Link href="/admin/settings" className={`${styles.bottomNavLink} ${pathname?.startsWith('/admin/settings') ? styles.activeBottomNavLink : ''}`}><Settings className={styles.bottomNavIcon} /><span className={styles.bottomNavText}>Set</span></Link>
             </nav>

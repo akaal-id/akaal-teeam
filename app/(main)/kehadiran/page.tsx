@@ -3,7 +3,7 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import styles from './page.module.css';
-import { Clock, Play, Square, CheckCircle2, AlertCircle, FileText, CalendarDays, Loader2, X } from 'lucide-react';
+import { Clock, Play, Square, CheckCircle2, AlertCircle, FileText, CalendarDays, Loader2, X, ListChecks } from 'lucide-react';
 import { useAttendance } from '../../contexts/AttendanceContext';
 import { useUser } from '../../contexts/UserContext';
 
@@ -51,6 +51,11 @@ function KehadiranContent() {
     const [reason, setReason] = useState('');
     const [izinProof, setIzinProof] = useState<File | null>(null);
     const [suratSakit, setSuratSakit] = useState<File | null>(null);
+    const [clockOutModalOpen, setClockOutModalOpen] = useState(false);
+    const [workflowSummary, setWorkflowSummary] = useState('');
+    const [workflowDetails, setWorkflowDetails] = useState('');
+    const [clockOutError, setClockOutError] = useState('');
+    const [clockingOut, setClockingOut] = useState(false);
 
     useEffect(() => {
         if (leaveIdParam) setLeaveModalOpen(true);
@@ -140,6 +145,54 @@ function KehadiranContent() {
         setLeaveError('');
     };
 
+
+    const openClockOutModal = () => {
+        setClockOutError('');
+        setWorkflowSummary('');
+        setWorkflowDetails('');
+        setClockOutModalOpen(true);
+    };
+
+    const closeClockOutModal = () => {
+        setClockOutModalOpen(false);
+        setClockOutError('');
+    };
+
+    const handleClockOutWithWorkflow = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!user?.id) return;
+        if (!workflowSummary.trim()) {
+            setClockOutError('Ringkasan pekerjaan hari ini wajib diisi.');
+            return;
+        }
+
+        setClockingOut(true);
+        setClockOutError('');
+
+        const today = new Date().toISOString().slice(0, 10);
+        const res = await fetch('/api/workflows', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user_id: user.id,
+                work_date: today,
+                summary: workflowSummary.trim(),
+                details: workflowDetails.trim() || null,
+            }),
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+            setClockingOut(false);
+            setClockOutError((data as { error?: string }).error || 'Gagal menyimpan workflow harian.');
+            return;
+        }
+
+        await clockOut();
+        setClockingOut(false);
+        setClockOutModalOpen(false);
+    };
+
     const handleLeaveSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!user?.id) return;
@@ -195,7 +248,7 @@ function KehadiranContent() {
                             <Play className={styles.iconSm} /> Absen Masuk
                         </button>
                     ) : !clockOutTime ? (
-                        <button className={styles.clockOutBtn} onClick={clockOut}>
+                        <button className={styles.clockOutBtn} onClick={openClockOutModal}>
                             <Square className={styles.iconSm} /> Catat Pulang
                         </button>
                     ) : (
@@ -372,6 +425,64 @@ function KehadiranContent() {
                     )}
                 </div>
             </main>
+
+
+            {clockOutModalOpen && (
+                <div className={styles.modalBackdrop} role="presentation" onClick={closeClockOutModal}>
+                    <div className={styles.modalPanel} role="dialog" aria-modal="true" onClick={e => e.stopPropagation()}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem' }}>
+                            <div>
+                                <h2 className={styles.modalTitle}>Sebelum Absen Pulang</h2>
+                                <p className={styles.modalHint}>Isi workflow harian terlebih dahulu agar progres kerja tercatat.</p>
+                            </div>
+                            <button type="button" className={styles.btnGhost} onClick={closeClockOutModal} aria-label="Tutup">
+                                <X size={18} />
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleClockOutWithWorkflow}>
+                            <div className={styles.formGroup}>
+                                <label className={styles.formLabel} htmlFor="wf-summary">
+                                    Task/hasil utama hari ini
+                                </label>
+                                <input
+                                    id="wf-summary"
+                                    className={styles.inputField}
+                                    value={workflowSummary}
+                                    onChange={e => setWorkflowSummary(e.target.value)}
+                                    placeholder="Contoh: Selesaikan revisi landing page dan review task QA"
+                                    required
+                                />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <label className={styles.formLabel} htmlFor="wf-details">
+                                    Detail workflow (opsional)
+                                </label>
+                                <textarea
+                                    id="wf-details"
+                                    className={styles.textAreaField}
+                                    value={workflowDetails}
+                                    onChange={e => setWorkflowDetails(e.target.value)}
+                                    placeholder="Tulis poin pekerjaan, hambatan, dan tindak lanjut besok"
+                                />
+                            </div>
+
+                            {clockOutError && <p className={styles.errorText}>{clockOutError}</p>}
+
+                            <div className={styles.modalActions}>
+                                <button type="button" className={styles.btnGhost} onClick={closeClockOutModal}>
+                                    Batal
+                                </button>
+                                <button type="submit" className={styles.btnSubmit} disabled={clockingOut}>
+                                    {clockingOut ? <Loader2 size={18} className="animate-spin" /> : <ListChecks size={18} />}
+                                    Simpan & Absen Pulang
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
 
             {leaveModalOpen && (
                 <div className={styles.modalBackdrop} role="presentation" onClick={closeLeaveModal}>

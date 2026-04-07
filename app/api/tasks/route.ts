@@ -13,6 +13,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     const userId = searchParams.get('user_id');
+    const date = searchParams.get('date');
 
     if (id) {
         const { data, error } = await supabaseAdmin.from('tasks').select(TASK_SELECT).eq('id', id).maybeSingle();
@@ -30,6 +31,8 @@ export async function GET(request: NextRequest) {
             .or(`assignee_id.eq.${userId},assignor_id.eq.${userId}`)
             .order('created_at', { ascending: false });
     }
+
+    if (date) query = query.eq('deadline', date);
 
     const { data, error } = await query;
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
